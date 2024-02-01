@@ -12,6 +12,9 @@ def preprocess(data):
     features = ['TotalBsmtSF', 'GrLivArea', 'BedroomAbvGr', 'FullBath', 'HalfBath', 'BsmtFullBath', 'BsmtHalfBath']
     features = data[features]
     target = data['SalePrice']
+    print('Random Data Sample After Pre-Processing')
+    print('--------------------------------')
+    print(pd.concat([features, target], axis=1).sample(10))
     return train_test_split(features, target, test_size=0.3, random_state=42)
 
 
@@ -25,14 +28,14 @@ def train(model, xTrain, yTrain):
 
 def predict(model, xTest):
     print('\nPredicting')
-    print('----------------------------')
+    print('--------------------------------')
     predictions = model.predict(xTest)
     print(pd.DataFrame(predictions))
     return model, predictions
 
 
 def showMetrics(yTest, predictions):
-    print('\n----------------------------')
+    print('--------------------------------')
     mse = mean_squared_error(yTest, predictions)
     r2 = r2_score(yTest, predictions)
     evs = explained_variance_score(yTest, predictions)
@@ -52,6 +55,7 @@ def showPlot(yTest, predictions):
     plt.show()
 
 
+print('----------------------------')
 model = LinearRegression()
 data = pd.read_csv(os.path.join("dataset", "houseSales.csv"))
 xTrain, xTest, yTrain, yTest = preprocess(data)
@@ -59,3 +63,4 @@ model = train(model, xTrain, yTrain)
 model, predictions = predict(model, xTest)
 showMetrics(yTest, predictions)
 showPlot(yTest, predictions)
+print('----------------------------')
